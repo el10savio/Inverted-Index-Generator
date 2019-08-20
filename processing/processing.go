@@ -57,7 +57,7 @@ func GenerateDocMap(token []string) map[string]bool {
 	return docMap
 }
 
-func GenerateInvertedIndex(DocList []string) {
+func GenerateInvertedIndex(DocList []string) iIndex.InvertedIndex {
 	globalDocMap := make([]map[string]bool, 0)
 
 	for _, Doc := range DocList {
@@ -73,5 +73,18 @@ func GenerateInvertedIndex(DocList []string) {
 			invertedIndex.AddItem(DocEntry, DocMapIndex)
 		}
 	}
-	fmt.Println("invertedIndex:", invertedIndex)
+	return *invertedIndex
+}
+
+func Find(index iIndex.InvertedIndex, searchTerm string) {
+	Term := strings.ToLower(searchTerm)
+
+	if index.HashMap[Term] != nil {
+		itemPosition := index.FindItem(Term)
+		item := index.Items[itemPosition]
+
+		fmt.Println("Found:", searchTerm, "in documents:", item.DocumentListing)
+	} else {
+		fmt.Println("Not Found:", searchTerm)
+	}
 }

@@ -11,5 +11,8 @@ func main() {
 		"increase in home sales in July",
 		"July new home sales rise"}
 
-	processing.GenerateInvertedIndex(DocList)
+	index := processing.GenerateInvertedIndex(DocList)
+
+	processing.Find(index, "Sales")
+	processing.Find(index, "June")
 }

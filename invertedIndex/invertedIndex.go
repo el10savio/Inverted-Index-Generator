@@ -25,10 +25,9 @@ func (invertedIndex *InvertedIndex) AddItem(Term string, Document int) {
 		// log.Println("Index item", Term, "already exists :: updating existing item")
 
 		InvertedIndexItemPosition := invertedIndex.FindItem(Term)
-		foundIndexItem := invertedIndex.Items[InvertedIndexItemPosition]
 
-		foundIndexItem.Frequency++
-		foundIndexItem.DocumentListing = append(foundIndexItem.DocumentListing, Document)
+		invertedIndex.Items[InvertedIndexItemPosition].Frequency++
+		invertedIndex.Items[InvertedIndexItemPosition].DocumentListing = append(invertedIndex.Items[InvertedIndexItemPosition].DocumentListing, Document)
 	} else {
 		// log.Println("Index item", Term, " does not exist :: creating new item")
 
