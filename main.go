@@ -68,18 +68,11 @@ func GenerateInvertedIndex(DocList []string) {
 	}
 
 	// fmt.Println("globalDocMap:", globalDocMap)
-	var invertedIndex iIndex.InvertedIndex
+	invertedIndex := iIndex.CreateInvertedIndex()
 
 	for DocMapIndex, DocMap := range globalDocMap {
 		for DocEntry, _ := range DocMap {
-			var Item iIndex.InvertedIndexItem
-			Item.Term = DocEntry
-			Item.Frequency = 1
-
-			Item.PostingsList.Value = DocMapIndex
-			Item.PostingsList.Next = nil
-
-			invertedIndex.AddItem(Item)
+			invertedIndex.AddItem(DocEntry, DocMapIndex)
 		}
 	}
 	fmt.Println("invertedIndex:", invertedIndex)
