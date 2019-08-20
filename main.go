@@ -58,7 +58,6 @@ func GenerateDocMap(token []string) map[string]bool {
 }
 
 func GenerateInvertedIndex(DocList []string) {
-	// fmt.Println("DocList:", DocList)
 	globalDocMap := make([]map[string]bool, 0)
 
 	for _, Doc := range DocList {
@@ -67,7 +66,6 @@ func GenerateInvertedIndex(DocList []string) {
 		globalDocMap = append(globalDocMap, docMap)
 	}
 
-	// fmt.Println("globalDocMap:", globalDocMap)
 	invertedIndex := iIndex.CreateInvertedIndex()
 
 	for DocMapIndex, DocMap := range globalDocMap {

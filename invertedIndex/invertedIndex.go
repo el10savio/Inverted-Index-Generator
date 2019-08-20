@@ -1,18 +1,9 @@
 package invertedIndex
 
-import (
-	"fmt"
-)
-
-type LinkedList struct {
-	Value int
-	Next  *LinkedList
-}
-
 type InvertedIndexItem struct {
-	Term         string
-	Frequency    int
-	PostingsList LinkedList
+	Term            string
+	Frequency       int
+	DocumentListing []int
 }
 
 type InvertedIndex struct {
@@ -20,25 +11,35 @@ type InvertedIndex struct {
 	Items   []InvertedIndexItem
 }
 
+func (invertedIndex *InvertedIndex) FindItem(Term string) int {
+	for index, item := range invertedIndex.Items {
+		if item.Term == Term {
+			return index
+		}
+	}
+	panic("Not Found")
+}
+
 func (invertedIndex *InvertedIndex) AddItem(Term string, Document int) {
 	if invertedIndex.HashMap[Term] != nil {
-		fmt.Println("Index item already exists :: updating existing item")
-	} else {
-		fmt.Println("Index item does not exist :: creating new item")
+		// log.Println("Index item", Term, "already exists :: updating existing item")
 
-		var _PostingsList LinkedList
-		_PostingsList.Value = Document
-		_PostingsList.Next = nil
+		InvertedIndexItemPosition := invertedIndex.FindItem(Term)
+		foundIndexItem := invertedIndex.Items[InvertedIndexItemPosition]
+
+		foundIndexItem.Frequency++
+		foundIndexItem.DocumentListing = append(foundIndexItem.DocumentListing, Document)
+	} else {
+		// log.Println("Index item", Term, " does not exist :: creating new item")
 
 		invertedIndexItem := &InvertedIndexItem{
-			Term:         Term,
-			Frequency:    1,
-			PostingsList: _PostingsList,
+			Term:            Term,
+			Frequency:       1,
+			DocumentListing: []int{Document},
 		}
 
 		invertedIndex.HashMap[Term] = invertedIndexItem
 		invertedIndex.Items = append(invertedIndex.Items, *invertedIndexItem)
-
 	}
 }
 
