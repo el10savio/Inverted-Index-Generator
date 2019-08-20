@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	iIndex "./invertedIndex"
 )
 
 func RemoveDuplicates(wordList []string) []string {
@@ -66,18 +68,18 @@ func GenerateInvertedIndex(DocList []string) {
 	}
 
 	// fmt.Println("globalDocMap:", globalDocMap)
-	var invertedIndex InvertedIndex
+	var invertedIndex iIndex.InvertedIndex
 
 	for DocMapIndex, DocMap := range globalDocMap {
 		for DocEntry, _ := range DocMap {
-			var Item InvertedIndexItem
+			var Item iIndex.InvertedIndexItem
 			Item.Term = DocEntry
 			Item.Frequency = 1
 
-			Item.PostingsList.value = DocMapIndex
-			Item.PostingsList.next = nil
+			Item.PostingsList.Value = DocMapIndex
+			Item.PostingsList.Next = nil
 
-			invertedIndex.Items = append(invertedIndex.Items, Item)
+			invertedIndex.AddItem(Item)
 		}
 	}
 	fmt.Println("invertedIndex:", invertedIndex)

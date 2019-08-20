@@ -1,8 +1,10 @@
 package invertedIndex
 
+import "fmt"
+
 type LinkedList struct {
-	value int
-	next  *LinkedList
+	Value int
+	Next  *LinkedList
 }
 
 type InvertedIndexItem struct {
@@ -12,5 +14,14 @@ type InvertedIndexItem struct {
 }
 
 type InvertedIndex struct {
-	Items []InvertedIndexItem
+	HashMap map[string]*InvertedIndexItem
+	Items   []InvertedIndexItem
+}
+
+func (invertedIndex *InvertedIndex) AddItem(Item InvertedIndexItem) {
+	if invertedIndex.HashMap[Item.Term] != nil {
+		fmt.Println("Index item already exists")
+	} else {
+		fmt.Println("Index item does not exist")
+	}
 }
