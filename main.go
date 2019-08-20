@@ -55,21 +55,6 @@ func GenerateDocMap(token []string) map[string]bool {
 	return docMap
 }
 
-type LinkedList struct {
-	value int
-	next  *LinkedList
-}
-
-type InvertedIndexItem struct {
-	Term         string
-	Frequency    int
-	PostingsList LinkedList
-}
-
-type InvertedIndex struct {
-	Items []InvertedIndexItem
-}
-
 func GenerateInvertedIndex(DocList []string) {
 	// fmt.Println("DocList:", DocList)
 	globalDocMap := make([]map[string]bool, 0)
