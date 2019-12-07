@@ -6,20 +6,20 @@ import (
 	"strings"
 )
 
-// InvertedIndexItem contains the term followed by the
+// InvertedIndexEntry contains the term followed by the
 // number of times it has appeared across all documents
 // and an array of documents it is persent in
-type InvertedIndexItem struct {
+type InvertedIndexEntry struct {
 	Term            string
 	Frequency       int
 	DocumentListing []int
 }
 
 // InvertedIndex contains a hash map to easily check if the
-// term is present and an array of InvertedIndexItem
+// term is present and an array of InvertedIndexEntry
 type InvertedIndex struct {
-	HashMap map[string]*InvertedIndexItem
-	Items   []InvertedIndexItem
+	HashMap map[string]*InvertedIndexEntry
+	Items   []*InvertedIndexEntry
 }
 
 // FindItem returns the position of a given
@@ -49,14 +49,14 @@ func (invertedIndex *InvertedIndex) AddItem(Term string, Document int) {
 	} else {
 		// log.Println("Index item", Term, " does not exist :: creating new item")
 
-		invertedIndexItem := &InvertedIndexItem{
+		InvertedIndexEntry := &InvertedIndexEntry{
 			Term:            Term,
 			Frequency:       1,
 			DocumentListing: []int{Document},
 		}
 
-		invertedIndex.HashMap[Term] = invertedIndexItem
-		invertedIndex.Items = append(invertedIndex.Items, *invertedIndexItem)
+		invertedIndex.HashMap[Term] = InvertedIndexEntry
+		invertedIndex.Items = append(invertedIndex.Items, InvertedIndexEntry)
 	}
 }
 
@@ -64,8 +64,8 @@ func (invertedIndex *InvertedIndex) AddItem(Term string, Document int) {
 // empty Inverted Index
 func CreateInvertedIndex() *InvertedIndex {
 	invertedIndex := &InvertedIndex{
-		HashMap: make(map[string]*InvertedIndexItem),
-		Items:   []InvertedIndexItem{},
+		HashMap: make(map[string]*InvertedIndexEntry),
+		Items:   []*InvertedIndexEntry{},
 	}
 	return invertedIndex
 }
@@ -105,8 +105,8 @@ func Preprocessing(wordList []string) []string {
 func Tokenize(Doc string) []string {
 	wordList := []string{}
 
-	// The following regexp finds indivdual
-	//  words in a sentence
+	// The following regexp finds individual
+	// words in a sentence
 	r := regexp.MustCompile("[^\\s]+")
 	wordList = r.FindAllString(Doc, -1)
 
@@ -150,7 +150,7 @@ func GenerateInvertedIndex(DocList []string) InvertedIndex {
 	// Using the generated hash maps add
 	// each word to the inverted index
 	for DocMapIndex, DocMap := range globalDocMap {
-		for DocEntry, _ := range DocMap {
+		for DocEntry := range DocMap {
 			invertedIndex.AddItem(DocEntry, DocMapIndex)
 		}
 	}
