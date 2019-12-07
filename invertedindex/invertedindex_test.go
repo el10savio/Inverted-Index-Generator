@@ -1,23 +1,96 @@
 package invertedindex
 
-// func main() {
-// 	// Here we enter a list of sentences
-// 	// corresponding to text in documents
-// 	DocList := []string{
-// 		"new home sales top forecasts",
-// 		"home sales rise in July",
-// 		"increase in home sales in July",
-// 		"July new home sales rise"}
+import (
+	"reflect"
+	"testing"
+)
 
-// 	// Generate the inverted index
-// 	index := invertedindex.GenerateInvertedIndex(DocList)
+var wordListTest = []string{
+	"new", "HOme", "sales", "top", "forecasts",
+	"home", "sales", "rise", "in", "July",
+	"increase", "in", "home", "SALES", "in",
+	"July", "new", "home", "sales", "rise", "July",
+}
 
-// 	// Search for "Sales" and output the
-// 	// list of documents containing it
-// 	invertedindex.Find(index, "Sales")
+func TestPreprocessing(t *testing.T) {
+	wordList := wordListTest
 
-// 	// Ability to show that search
-// 	// outputs values that dont
-// 	// exist in the documents
-// 	invertedindex.Find(index, "June")
-// }
+	expectedList := []string{
+		"new", "home", "sales", "top", "forecasts",
+		"home", "sales", "rise", "in", "july",
+		"increase", "in", "home", "sales", "in",
+		"july", "new", "home", "sales", "rise", "july",
+	}
+
+	actualList := Preprocessing(wordList)
+
+	if !reflect.DeepEqual(expectedList, actualList) {
+		t.Fatalf("\nExpected:%v \nGot:%v", expectedList, actualList)
+	}
+}
+
+func TestPreprocessing_NoWordList(t *testing.T) {
+	wordList := make([]string, 0)
+
+	expectedList := make([]string, 0)
+
+	actualList := Preprocessing(wordList)
+
+	if !reflect.DeepEqual(expectedList, actualList) {
+		t.Fatalf("\nExpected:%v \nGot:%v", expectedList, actualList)
+	}
+}
+
+func TestRemoveDuplicates(t *testing.T) {
+	wordList := Preprocessing(wordListTest)
+
+	expectedList := []string{
+		"new", "home", "sales", "top", "forecasts",
+		"rise", "in", "july",
+		"increase",
+	}
+
+	actualList := RemoveDuplicates(wordList)
+
+	if !reflect.DeepEqual(expectedList, actualList) {
+		t.Fatalf("\nExpected:%v \nGot:%v", expectedList, actualList)
+	}
+}
+
+func TestRemoveDuplicates_NoWordList(t *testing.T) {
+	wordList := make([]string, 0)
+
+	expectedList := make([]string, 0)
+
+	actualList := RemoveDuplicates(wordList)
+
+	if !reflect.DeepEqual(expectedList, actualList) {
+		t.Fatalf("\nExpected:%v \nGot:%v", expectedList, actualList)
+	}
+}
+
+func TestTokenize(t *testing.T) {
+	doc := "new home sales top forecasts NEW"
+
+	expectedList := []string{
+		"new", "home", "sales", "top", "forecasts",
+	}
+
+	actualList := Tokenize(doc)
+
+	if !reflect.DeepEqual(expectedList, actualList) {
+		t.Fatalf("\nExpected:%v \nGot:%v", expectedList, actualList)
+	}
+}
+
+func TestTokenize_NoDoc(t *testing.T) {
+	var doc string
+
+	expectedList := []string{}
+
+	actualList := Tokenize(doc)
+
+	if !reflect.DeepEqual(expectedList, actualList) {
+		t.Fatalf("\nExpected:%v \nGot:%v", expectedList, actualList)
+	}
+}

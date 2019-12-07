@@ -159,7 +159,7 @@ func GenerateInvertedIndex(DocList []string) InvertedIndex {
 
 // Find for a given inverted index and search term
 // checks if the term exists and then
-// ouputs the documents the
+// outputs the documents the
 // term is in
 func Find(index InvertedIndex, searchTerm string) {
 	Term := strings.ToLower(searchTerm)
